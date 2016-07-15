@@ -10,12 +10,12 @@
     <version>0-SNAPSHOT</version>
 
     <scm>
-        <connection>https://github.com/fhoeben/sysco-bi-fitnesse-fixture.git
+        <connection>https://github.com/binkley/eg-hsac-fitnesse-fixture.git
         </connection>
         <developerConnection>
-            https://github.com/fhoeben/sysco-bi-fitnesse-fixture.git
+            https://github.com/binkley/eg-hsac-fitnesse-fixture.git
         </developerConnection>
-        <url>https://github.com/fhoeben/sysco-bi-fitnesse-fixture.git</url>
+        <url>https://github.com/binkley/eg-hsac-fitnesse-fixture.git</url>
     </scm>
 
     <properties>
@@ -23,6 +23,7 @@
         <hsac-fitnesse-fixtures.version>2.7.1</hsac-fitnesse-fixtures.version>
         <java.version>1.7</java.version>
         <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -43,6 +44,16 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>${maven-dependency-plugin.version}</version>
@@ -98,14 +109,26 @@
                 </executions>
             </plugin>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>install-wiki</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/fitnesse</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.resources[0].directory}</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
