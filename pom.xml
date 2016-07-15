@@ -22,6 +22,7 @@
         <fitnesse.version>20160618</fitnesse.version>
         <hsac-fitnesse-fixtures.version>2.7.1</hsac-fitnesse-fixtures.version>
         <java.version>1.7</java.version>
+        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -43,7 +44,38 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven-dependency-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>setup-fitnesse</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>nl.hsac</groupId>
+                                    <artifactId>hsac-fitnesse-fixtures</artifactId>
+                                    <version>${hsac-fitnesse-fixtures.version}</version>
+                                    <classifier>standalone</classifier>
+                                    <type>zip</type>
+                                    <outputDirectory>${project.build.directory}/fitnesse</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>${project.artifactId}</artifactId>
+                                    <version>${project.version}</version>
+                                    <outputDirectory>${project.build.directory}/fitnesse/fixtures</outputDirectory>
+                                    <excludes>/META-INF,/META-INF/**/*</excludes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
